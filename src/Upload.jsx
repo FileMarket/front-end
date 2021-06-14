@@ -12,6 +12,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import SnackbarAlert from './Snackbar';
 import uploadFile from './api-client/Upload';
 import { API_GET_ALL_CATEGORY } from './apiConstants';
 
@@ -58,6 +59,11 @@ const Upload = () => {
   const classes = useStyles();
   const data = new FormData();
   const [category, setCategory] = useState([]);
+  const [snackbarInfo, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
 
   useEffect(() => {
     const fetchMyAPI = async () => {
@@ -226,7 +232,22 @@ const Upload = () => {
                   }
                 }}
                 showPreviews
-                showAlerts
+                showAlerts={false}
+                onDrop={() => setSnackbarInfo({
+                  open: true,
+                  message: 'فایل با موفقیت اضافه شد',
+                  severity: 'success',
+                })}
+                onDropRejected={() => setSnackbarInfo({
+                  open: true,
+                  message: 'فایل اضافه نشد',
+                  severity: 'error',
+                })}
+                onDelete={() => setSnackbarInfo({
+                  open: true,
+                  message: 'فایل با موفقیت حذف شد',
+                  severity: 'info',
+                })}
                 filesLimit={1}
                 showPreviewsInDropzone={false}
                 useChipsForPreview
@@ -250,6 +271,12 @@ const Upload = () => {
           </Grid>
         </form>
       </Paper>
+      <SnackbarAlert
+        open={snackbarInfo.open}
+        setOpen={e => setSnackbarInfo({ ...snackbarInfo, open: e })}
+        message={snackbarInfo.message}
+        severity={snackbarInfo.severity}
+      />
     </Container>
   );
 };

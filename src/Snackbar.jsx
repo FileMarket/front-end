@@ -14,8 +14,6 @@ const SnackbarAlert = (props) => {
     message,
     severity, // success, error, warning, info
   } = props;
-  const vertical = 'bottom';
-  const horizontal = 'right';
 
   const handleClose = (_event, reason) => {
     if (reason === 'clickaway') {
@@ -27,7 +25,10 @@ const SnackbarAlert = (props) => {
   return (
     <Snackbar
       open={open}
-      anchorOrigin={{ vertical, horizontal }}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
       autoHideDuration={4000}
       onClose={handleClose}
     >
