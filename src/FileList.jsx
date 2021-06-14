@@ -6,6 +6,8 @@ import {
   Paper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import FileItem from './FileItem';
+import { API_GET_ALL_FILES } from './apiConstants';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -14,26 +16,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const RequestList = () => {
+const FormList = () => {
   const classes = useStyles();
-  const [requestList, setRequestList] = useState([]);
-  const [confirmModalInfo, setConfirmModalInfo] = useState({
-    itemID: '',
-    itemStatus: '',
-    open: false,
-  });
+  const [allFileItem, setAllFileItem] = useState([]);
+  // const [detailModal, setDetailModal] = useState({
+  //   itemID: '',
+  //   open: false,
+  // });
 
   useEffect(() => {
-    const getAllPurchaseRequests = async () => {
-      await fetch(`${API_GET_ALL_CATEGORY}`, {
+    const getAllFileItems = async () => {
+      await fetch(`${API_GET_ALL_FILES}`, {
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
       })
         .then(response => response.json())
         .then((responseJson) => {
-          const subCategoryItems = Object.keys(responseJson)
+          const fileItem = Object.keys(responseJson)
             .flatMap(key => responseJson[key]);
-          setCategory(subCategoryItems);
+          setAllFileItem(fileItem);
         })
         .catch((error) => {
         // maybe return a snackbar to
@@ -41,49 +42,38 @@ const RequestList = () => {
           console.error(error);
         });
     };
-    getAllPurchaseRequests();
+    getAllFileItems();
   }, []);
 
   return (
-    <>
-      <Container component="main" maxWidth="sm">
-        <Paper className={classes.paper} elevation={8}>
-          <Grid
-            container
-            alignItems="center"
-            justify="center"
-            spacing={4}
-          >
-            <Grid item xs={12}>
-              <List>
-                {
-                  requestList.map(value => (
-                    <div key={value.itemKey}>
-                      <RequestItem
-                        itemKey={value.itemKey}
-                        name={value.name}
-                        phoneNumber={value.phoneNumber}
-                        requestType={value.requestType}
-                        setModalOpen={setConfirmModalInfo}
-                      />
-                    </div>
-                  ))
-                }
-              </List>
-            </Grid>
+    <Container component="main" maxWidth="sm">
+      <Paper className={classes.paper} elevation={8}>
+        <Grid
+          container
+          alignItems="center"
+          justify="center"
+          spacing={4}
+        >
+          <Grid item xs={12}>
+            <List>
+              {
+                allFileItem.map(value => (
+                  <div key={value.id}>
+                    <FileItem
+                      itemKey={value.id}
+                      fileName={value.realName}
+                      price={value.price}
+                      // setModalOpen={setDetailModal}
+                    />
+                  </div>
+                ))
+              }
+            </List>
           </Grid>
-        </Paper>
-      </Container>
-
-      <ConfirmationDialog
-        title="Are you sure you want to save changes?"
-        subTitle="You can not change it later"
-        modalOpen={confirmModalInfo}
-        setModalOpen={setConfirmModalInfo}
-        onYesButtonClick={updateRequestStatus}
-      />
-    </>
+        </Grid>
+      </Paper>
+    </Container>
   );
 };
 
-export default RequestList;
+export default FormList;

@@ -1,40 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Avatar,
   Button,
   FormGroup,
   FormControlLabel,
   ListItem,
   ListItemIcon,
   ListItemText,
-  ListItemAvatar,
 } from '@material-ui/core';
+import DetailsIcon from '@material-ui/icons/Details';
 
-const RequestItem = (props) => {
+const FileItem = (props) => {
   const {
     itemKey,
-    name,
-    phoneNumber,
-    requestType,
+    fileName,
+    price,
     setModalOpen,
   } = props;
 
-  const modalOpenHandler = () => setModalOpen(true);
+  const detailModalOpenHandler = () => setModalOpen({ id: itemKey, open: true });
 
   return (
     <ListItem key={itemKey} dense>
-      <ListItemAvatar>
-        <Avatar>
-          {requestType}
-        </Avatar>
-      </ListItemAvatar>
-
       <ListItemText
-        primary={name}
-        secondary={phoneNumber}
+        primary={fileName}
+        secondary={`قیمت : ${price}`}
       />
-
       <ListItemIcon>
         <FormGroup aria-label="position" row>
           <FormControlLabel
@@ -42,20 +33,10 @@ const RequestItem = (props) => {
             control={(
               <Button
                 color="primary"
-                onClick={modalOpenHandler}
+                endIcon={<DetailsIcon />}
+                onClick={detailModalOpenHandler}
               >
-                موفقیت
-              </Button>
-            )}
-          />
-          <FormControlLabel
-            value="top"
-            control={(
-              <Button
-                color="primary"
-                onClick={modalOpenHandler}
-              >
-                شکست
+                مشاهده جزییات و خرید
               </Button>
             )}
           />
@@ -65,12 +46,11 @@ const RequestItem = (props) => {
   );
 };
 
-RequestItem.propTypes = {
+FileItem.propTypes = {
   itemKey: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  phoneNumber: PropTypes.string.isRequired,
-  requestType: PropTypes.string.isRequired,
+  fileName: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
   setModalOpen: PropTypes.func.isRequired,
 };
 
-export default RequestItem;
+export default FileItem;
