@@ -43,24 +43,26 @@ const Login = () => {
   const [check, setCheck] = useState(Boolean(localStorage.checkbox));
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: check ? localStorage.getItem('email') : '',
+      password: check ? localStorage.getItem('password') : '',
     },
     validationSchema,
     onSubmit: (values) => {
+      localStorage.email = formik.values.email;
+      localStorage.password = formik.values.password;
       login(values);
     },
   });
 
   const onCheckBoxClickHandler = () => {
-    if (!check && formik.values.email !== '' && formik.values.password) {
+    if (!check) {
       localStorage.email = formik.values.email;
       localStorage.password = formik.values.password;
       localStorage.checkbox = !check;
     } else {
-      localStorage.email = '';
-      localStorage.password = '';
-      localStorage.checkbox = '';
+      localStorage.clear();
+      formik.setFieldValue('email', '');
+      formik.setFieldValue('password', '');
     }
     setCheck(!check);
   };
@@ -73,13 +75,21 @@ const Login = () => {
             <Grid item xs={12}>
               <TextField
                 autoComplete="true"
-                error={formik.touched.email && Boolean(formik.errors.email)}
+                error={
+                  !!formik.errors.email
+                  && formik.touched.email
+                  && Boolean(formik.errors.email)
+                }
                 fullWidth
-                helperText={formik.touched.email && formik.errors.email}
+                helperText={
+                  !!formik.errors.email
+                  && formik.touched.email
+                  && formik.errors.email
+                }
                 id="email-input-login"
                 label="آدرس ایمیل"
                 name="email"
-                value={localStorage.checkbox ? localStorage.email : formik.values.email}
+                value={formik.values.email}
                 onChange={formik.handleChange}
                 variant="outlined"
               />
@@ -87,14 +97,22 @@ const Login = () => {
             <Grid item xs={12}>
               <TextField
                 autoComplete="off"
-                error={formik.touched.password && Boolean(formik.errors.password)}
+                error={
+                  !!formik.errors.password
+                  && formik.touched.password
+                  && Boolean(formik.errors.password)
+                }
                 fullWidth
-                helperText={formik.touched.password && formik.errors.password}
+                helperText={
+                  !!formik.errors.password
+                  && formik.touched.password
+                  && formik.errors.password
+                }
                 id="password-input-login"
                 label="رمز عبور"
                 name="password"
                 type="password"
-                value={localStorage.checkbox ? localStorage.password : formik.values.password}
+                value={formik.values.password}
                 onChange={formik.handleChange}
                 variant="outlined"
               />
