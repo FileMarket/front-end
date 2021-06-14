@@ -232,6 +232,7 @@ const Upload = () => {
                 useChipsForPreview
                 previewGridProps={{ container: { spacing: 1, direction: 'row' } }}
                 previewChipProps={{ classes: { root: classes.previewChip } }}
+                dropzoneText="یک فایل را در اینجا بکشید و رها کنید یا کلیک کنید"
                 previewText="فایل انتخاب شده"
               />
             </Grid>
