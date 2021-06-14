@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Container,
   Grid,
-  List,
-  Paper,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FileItem from './FileItem';
@@ -11,9 +9,9 @@ import SnackbarAlert from './Snackbar';
 import { API_GET_ALL_FILES } from './apiConstants';
 
 const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    padding: theme.spacing(1),
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
   },
 }));
 
@@ -44,38 +42,27 @@ const FormList = () => {
   }, []);
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Paper className={classes.paper} elevation={8}>
-        <Grid
-          container
-          alignItems="center"
-          justify="center"
-          spacing={4}
-        >
-          <Grid item xs={12}>
-            <List>
-              {
-                allFileItem.map(value => (
-                  <div key={value.id}>
-                    <FileItem
-                      itemKey={value.id}
-                      fileName={value.name}
-                      price={value.price}
-                      setModalOpen={() => null}
-                    />
-                  </div>
-                ))
-              }
-            </List>
-          </Grid>
-        </Grid>
-        <SnackbarAlert
-          open={snackbarOpen}
-          setOpen={setSnackbarOpen}
-          message="در بارگیری لیست فایل‌های موجود اشکالی رخ داده است"
-          severity="error"
-        />
-      </Paper>
+    <Container className={classes.cardGrid} maxWidth="md">
+      <Grid container spacing={4}>
+        {
+          allFileItem.map(value => (
+            <Grid item key={value.id} xs={12} sm={6} md={4}>
+              <FileItem
+                itemKey={value.id}
+                fileName={value.name}
+                price={value.price}
+                setModalOpen={() => null}
+              />
+            </Grid>
+          ))
+        }
+      </Grid>
+      <SnackbarAlert
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+        message="در بارگیری لیست فایل‌های موجود اشکالی رخ داده است"
+        severity="error"
+      />
     </Container>
   );
 };

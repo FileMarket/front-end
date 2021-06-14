@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   createMuiTheme,
@@ -9,8 +10,8 @@ import {
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import Login from './Login';
-import Header from './Header';
-// import FileList from './FileList';
+import Signup from './Signup';
+import Landing from './Landing';
 
 const theme = createMuiTheme({
   direction: 'rtl',
@@ -35,9 +36,11 @@ RTL.propTypes = {
 const App = () => (
   <ThemeProvider theme={theme}>
     <RTL>
-      <Header />
-      <Login />
-      {/* <FileList /> */}
+      <BrowserRouter>
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={Signup} />
+      </BrowserRouter>
     </RTL>
   </ThemeProvider>
 );

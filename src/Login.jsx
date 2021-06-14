@@ -3,20 +3,35 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
   Button,
-  Container,
   Checkbox,
   FormControlLabel,
   Grid,
+  Link,
   Paper,
   TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SnackbarAlert from './Snackbar';
 import login from './api-client/Login';
+import file_transfer from './image/file_transfer.jpg';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    height: '98vh',
+    width: '100%',
+  },
+  image: {
+    backgroundImage: `url(${file_transfer})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
   paper: {
-    marginTop: theme.spacing(8),
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     padding: theme.spacing(2),
   },
@@ -74,89 +89,106 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Paper className={classes.paper} elevation={8}>
-        <form className={classes.form} onSubmit={formik.handleSubmit}>
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="true"
-                error={
-                  !!formik.errors.email
-                  && formik.touched.email
-                  && Boolean(formik.errors.email)
-                }
-                fullWidth
-                helperText={
-                  !!formik.errors.email
-                  && formik.touched.email
-                  && formik.errors.email
-                }
-                id="email-input-login"
-                label="آدرس ایمیل"
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="off"
-                error={
-                  !!formik.errors.password
-                  && formik.touched.password
-                  && Boolean(formik.errors.password)
-                }
-                fullWidth
-                helperText={
-                  !!formik.errors.password
-                  && formik.touched.password
-                  && formik.errors.password
-                }
-                id="password-input-login"
-                label="رمز عبور"
-                name="password"
-                type="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={(
-                <Checkbox
-                  checked={check}
-                  value="termsAndConditions"
-                  onChange={onCheckBoxClickHandler}
-                  color="primary"
+    <>
+      <Grid container component="main" className={classes.root}>
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <div className={classes.paper}>
+            <form className={classes.form} onSubmit={formik.handleSubmit}>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="true"
+                    error={
+                      !!formik.errors.email
+                      && formik.touched.email
+                      && Boolean(formik.errors.email)
+                    }
+                    fullWidth
+                    helperText={
+                      !!formik.errors.email
+                      && formik.touched.email
+                      && formik.errors.email
+                    }
+                    id="email-input-login"
+                    label="آدرس ایمیل"
+                    name="email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="off"
+                    error={
+                      !!formik.errors.password
+                      && formik.touched.password
+                      && Boolean(formik.errors.password)
+                    }
+                    fullWidth
+                    helperText={
+                      !!formik.errors.password
+                      && formik.touched.password
+                      && formik.errors.password
+                    }
+                    id="password-input-login"
+                    label="رمز عبور"
+                    name="password"
+                    type="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    variant="outlined"
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      checked={check}
+                      value="termsAndConditions"
+                      onChange={onCheckBoxClickHandler}
+                      color="primary"
+                    />
+                  )}
+                  label="این نشست را به خاطر بسپار"
                 />
-              )}
-              label="این نشست را به خاطر بسپار"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              ورود
-            </Button>
-          </Grid>
-        </form>
-        <SnackbarAlert
-          open={snackbarInfo.open}
-          setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
-          message={snackbarInfo.message}
-          severity={snackbarInfo.severity}
-        />
-      </Paper>
-    </Container>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  ورود
+                </Button>
+              </Grid>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="/" variant="body2">
+                    فراموشی رمز عبور
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="/signup" variant="body2">
+                    حساب کاربری ندارید؟ ثبت نام
+                  </Link>
+                </Grid>
+              </Grid>
+            </form>
+          </div>
+        </Grid>
+      </Grid>
+      <SnackbarAlert
+        open={snackbarInfo.open}
+        setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
+        message={snackbarInfo.message}
+        severity={snackbarInfo.severity}
+      />
+    </>
   );
 };
 

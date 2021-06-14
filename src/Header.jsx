@@ -40,7 +40,7 @@ const Header = () => {
             <Grid container>
               <img src={logo} alt="Logo" className={classes.logo} />
               <Typography variant="h6" className={classes.title}>
-                File Market
+                فایل مارکت
               </Typography>
             </Grid>
           </Grid>
