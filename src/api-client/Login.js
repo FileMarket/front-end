@@ -1,6 +1,6 @@
 import { API_LOGIN } from '../apiConstants';
 
-const login = async (values, setSnackbarInfo) => {
+const login = async (values, setSnackbarInfo, setShouldRedirect) => {
   fetch(`${API_LOGIN}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -15,6 +15,7 @@ const login = async (values, setSnackbarInfo) => {
           message: 'با موفقیت وارد شدید',
           severity: 'success',
         });
+        setShouldRedirect(true);
       } else {
         setSnackbarInfo({
           open: true,
