@@ -98,15 +98,24 @@ const Upload = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      data.append('name', values.name);
-      data.append('description', values.description);
-      data.append('price', values.price);
-      data.append('format', values.format);
-      data.append('size', values.size);
-      data.append('token', values.token);
-      data.append('subcategory_id', values.subcategory_id);
-      data.append('file', values.file);
-      uploadFile(data);
+      if (values.token === null) {
+        setSnackbarInfo({
+          open: true,
+          message: 'شما از برنامه خارج شده اید',
+          severity: 'error',
+        });
+        // redirect to login page
+      } else {
+        data.append('name', values.name);
+        data.append('description', values.description);
+        data.append('price', values.price);
+        data.append('format', values.format);
+        data.append('size', values.size);
+        data.append('token', values.token);
+        data.append('subcategory_id', values.subcategory_id);
+        data.append('file', values.file);
+        uploadFile(data);
+      }
     },
   });
 

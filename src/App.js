@@ -10,6 +10,7 @@ import { create } from 'jss';
 import rtl from 'jss-rtl';
 import Upload from './Upload';
 import Login from './Login';
+import Header from './Header';
 
 const theme = createMuiTheme({
   direction: 'rtl',
@@ -34,6 +35,7 @@ RTL.propTypes = {
 const App = () => (
   <ThemeProvider theme={theme}>
     <RTL>
+      <Header />
       <Login />
       <Upload />
     </RTL>
