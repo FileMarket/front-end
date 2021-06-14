@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -9,6 +9,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import SnackbarAlert from './Snackbar';
 import signup from './api-client/Signup';
 
 const useStyles = makeStyles(theme => ({
@@ -29,11 +30,9 @@ const useStyles = makeStyles(theme => ({
 const validationSchema = yup.object({
   name: yup
     .string('نام خود را وارد کنید')
-    .matches(/[a-zA-Z0-9]+/, 'نام وارد شده نامعتبر است')
     .required('وارد کردن نام الزامی است'),
   family: yup
     .string('نام خانوادگی خود را وارد کنید')
-    .matches(/[a-zA-Z]+/, 'نام خانوادگی وارد شده نامعتبر است')
     .required('وارد کردن نام خانوادگی الزامی است'),
   email: yup
     .string('آدرس ایمیل خود را وارد کنید')
@@ -52,6 +51,12 @@ const validationSchema = yup.object({
 
 const Signup = () => {
   const classes = useStyles();
+  const [snackbarInfo, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -62,7 +67,7 @@ const Signup = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      signup(values);
+      signup(values, setSnackbarInfo);
     },
   });
 
@@ -155,6 +160,12 @@ const Signup = () => {
             </Button>
           </Grid>
         </form>
+        <SnackbarAlert
+          open={snackbarInfo.open}
+          setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
+          message={snackbarInfo.message}
+          severity={snackbarInfo.severity}
+        />
       </Paper>
     </Container>
   );

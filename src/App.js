@@ -8,9 +8,9 @@ import {
 } from '@material-ui/core/styles';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
-import Upload from './Upload';
 import Login from './Login';
 import Header from './Header';
+// import FileList from './FileList';
 
 const theme = createMuiTheme({
   direction: 'rtl',
@@ -37,7 +37,7 @@ const App = () => (
     <RTL>
       <Header />
       <Login />
-      <Upload />
+      {/* <FileList /> */}
     </RTL>
   </ThemeProvider>
 );

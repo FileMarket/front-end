@@ -11,6 +11,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import SnackbarAlert from './Snackbar';
 import login from './api-client/Login';
 
 const useStyles = makeStyles(theme => ({
@@ -41,6 +42,11 @@ const validationSchema = yup.object({
 const Login = () => {
   const classes = useStyles();
   const [check, setCheck] = useState(Boolean(localStorage.checkbox));
+  const [snackbarInfo, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
   const formik = useFormik({
     initialValues: {
       email: check ? localStorage.getItem('email') : '',
@@ -50,7 +56,7 @@ const Login = () => {
     onSubmit: (values) => {
       localStorage.email = formik.values.email;
       localStorage.password = formik.values.password;
-      login(values);
+      login(values, setSnackbarInfo);
     },
   });
 
@@ -143,6 +149,12 @@ const Login = () => {
             </Button>
           </Grid>
         </form>
+        <SnackbarAlert
+          open={snackbarInfo.open}
+          setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
+          message={snackbarInfo.message}
+          severity={snackbarInfo.severity}
+        />
       </Paper>
     </Container>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Button,
@@ -7,6 +7,7 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
+import SnackbarAlert from './Snackbar';
 import logout from './api-client/Logout';
 import logo from './image/logo.png';
 
@@ -18,11 +19,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Header = () => {
+  const [snackbarInfo, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
   const classes = useStyles();
   // const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const handleLogout = () => {
-    logout();
+    logout(setSnackbarInfo);
     // setShouldRedirect(true);
   };
 
@@ -48,6 +54,12 @@ const Header = () => {
             </Grid>
           </Grid>
         </Grid>
+        <SnackbarAlert
+          open={snackbarInfo.open}
+          setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
+          message={snackbarInfo.message}
+          severity={snackbarInfo.severity}
+        />
       </Toolbar>
     </AppBar>
   );

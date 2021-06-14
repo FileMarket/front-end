@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import { API_LOGOUT } from '../apiConstants';
 
-const logout = async () => {
+const logout = async (setSnackbarInfo) => {
   fetch(`${API_LOGOUT}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -11,13 +10,25 @@ const logout = async () => {
     .then((responseJson) => {
       if (responseJson.code === 200) {
         localStorage.removeItem('token');
-        console.log('Logout Successfully');
+        setSnackbarInfo({
+          open: true,
+          message: 'با موفقیت خارج شدید',
+          severity: 'success',
+        });
       } else {
-        console.log('Fail');
+        setSnackbarInfo({
+          open: true,
+          message: 'در خارج شدن از سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+          severity: 'error',
+        });
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
+      setSnackbarInfo({
+        open: true,
+        message: 'در خارج شدن از سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+        severity: 'error',
+      });
     });
 };
 

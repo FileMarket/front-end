@@ -47,7 +47,7 @@ const FileItem = (props) => {
 };
 
 FileItem.propTypes = {
-  itemKey: PropTypes.string.isRequired,
+  itemKey: PropTypes.number.isRequired,
   fileName: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   setModalOpen: PropTypes.func.isRequired,

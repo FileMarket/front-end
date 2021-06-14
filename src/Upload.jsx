@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone';
 import { useFormik } from 'formik';
@@ -38,11 +37,9 @@ const useStyles = makeStyles(theme => ({
 const validationSchema = yup.object({
   name: yup
     .string('نام فایل را وارد کنید')
-    .matches(/[a-zA-Z0-9]+/, 'نام فایل وارد شده نامعتبر است')
     .required('وارد کردن نام فایل الزامی است'),
   description: yup
-    .string('توضیحات خود درباره فایل را وارد کنید')
-    .matches(/[a-zA-Z0-9]+/, 'توضیحات وارد شده نامعتبر است'),
+    .string('توضیحات خود درباره فایل را وارد کنید'),
   price: yup
     .string('قیمت را وارد کنید')
     .matches(/[0-9]+/, 'قیمت وارد شده نامعتبر است')
@@ -77,8 +74,12 @@ const Upload = () => {
             .flatMap(key => responseJson[key]);
           setCategory(subCategoryItems);
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
+          setSnackbarInfo({
+            open: true,
+            message: 'در ارتباط با سرور خطایی رخ داده است',
+            severity: 'error',
+          });
         });
     };
 
@@ -114,7 +115,7 @@ const Upload = () => {
         data.append('token', values.token);
         data.append('subcategory_id', values.subcategory_id);
         data.append('file', values.file);
-        uploadFile(data);
+        uploadFile(data, setSnackbarInfo);
       }
     },
   });
@@ -218,7 +219,7 @@ const Upload = () => {
                   && formik.errors.price
                 }
                 id="filePrice-input"
-                label="قیمت فایل"
+                label="قیمت فایل (تومان)"
                 name="price"
                 value={formik.values.price}
                 onChange={formik.handleChange}

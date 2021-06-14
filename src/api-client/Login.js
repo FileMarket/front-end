@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import { API_LOGIN } from '../apiConstants';
 
-const login = async (values) => {
+const login = async (values, setSnackbarInfo) => {
   fetch(`${API_LOGIN}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -11,13 +10,25 @@ const login = async (values) => {
     .then((responseJson) => {
       if (responseJson.code === 200) {
         localStorage.setItem('token', responseJson.token);
-        console.log('Login Successfully');
+        setSnackbarInfo({
+          open: true,
+          message: 'با موفقیت وارد شدید',
+          severity: 'success',
+        });
       } else {
-        console.log('Fail');
+        setSnackbarInfo({
+          open: true,
+          message: 'در وارد شدن به سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+          severity: 'error',
+        });
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
+      setSnackbarInfo({
+        open: true,
+        message: 'در وارد شدن به سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+        severity: 'error',
+      });
     });
 };
 

@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import { API_SIGNUP } from '../apiConstants';
 
-const signup = async (values) => {
+const signup = async (values, setSnackbarInfo) => {
   fetch(`${API_SIGNUP}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -10,13 +9,25 @@ const signup = async (values) => {
     .then(response => response.json())
     .then((responseJson) => {
       if (responseJson.code === 200) {
-        console.log('Created Successfully');
+        setSnackbarInfo({
+          open: true,
+          message: 'شما با موفقیت در سامانه ثبت نام کردید',
+          severity: 'success',
+        });
       } else {
-        console.log('Fail');
+        setSnackbarInfo({
+          open: true,
+          message: 'در ثبت نام شما مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+          severity: 'error',
+        });
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
+      setSnackbarInfo({
+        open: true,
+        message: 'در ثبت نام شما مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+        severity: 'error',
+      });
     });
 };
 

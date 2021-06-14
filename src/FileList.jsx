@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FileItem from './FileItem';
+import SnackbarAlert from './Snackbar';
 import { API_GET_ALL_FILES } from './apiConstants';
 
 const useStyles = makeStyles(theme => ({
@@ -19,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 const FormList = () => {
   const classes = useStyles();
   const [allFileItem, setAllFileItem] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   // const [detailModal, setDetailModal] = useState({
   //   itemID: '',
   //   open: false,
@@ -36,11 +38,7 @@ const FormList = () => {
             .flatMap(key => responseJson[key]);
           setAllFileItem(fileItem);
         })
-        .catch((error) => {
-        // maybe return a snackbar to
-        // say "unable to load the list"
-          console.error(error);
-        });
+        .catch(() => setSnackbarOpen(true));
     };
     getAllFileItems();
   }, []);
@@ -61,9 +59,9 @@ const FormList = () => {
                   <div key={value.id}>
                     <FileItem
                       itemKey={value.id}
-                      fileName={value.realName}
+                      fileName={value.name}
                       price={value.price}
-                      // setModalOpen={setDetailModal}
+                      setModalOpen={() => null}
                     />
                   </div>
                 ))
@@ -71,6 +69,12 @@ const FormList = () => {
             </List>
           </Grid>
         </Grid>
+        <SnackbarAlert
+          open={snackbarOpen}
+          setOpen={setSnackbarOpen}
+          message="در بارگیری لیست فایل‌های موجود اشکالی رخ داده است"
+          severity="error"
+        />
       </Paper>
     </Container>
   );

@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import { API_FILE_UPLOAD } from '../apiConstants';
 
-const uploadFile = async (values) => {
+const uploadFile = async (values, setSnackbarInfo) => {
   fetch(`${API_FILE_UPLOAD}`, {
     method: 'post',
     body: values,
@@ -9,13 +8,25 @@ const uploadFile = async (values) => {
     .then(response => response.json())
     .then((responseJson) => {
       if (responseJson.code === 200) {
-        console.log('Upload Successfully');
+        setSnackbarInfo({
+          open: true,
+          message: 'فایل با موفقیت آپلود شد',
+          severity: 'success',
+        });
       } else {
-        console.log('Fail');
+        setSnackbarInfo({
+          open: true,
+          message: 'در آپلود فایل خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
+          severity: 'error',
+        });
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
+      setSnackbarInfo({
+        open: true,
+        message: 'در آپلود فایل خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
+        severity: 'error',
+      });
     });
 };
 
