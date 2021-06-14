@@ -37,9 +37,10 @@ const App = () => (
   <ThemeProvider theme={theme}>
     <RTL>
       <BrowserRouter>
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={Signup} />
+        <Route exact path="/" component={Landing}>
+          <Route exact path="login" component={Login} />
+          <Route exact path="signup" component={Signup} />
+        </Route>
       </BrowserRouter>
     </RTL>
   </ThemeProvider>
