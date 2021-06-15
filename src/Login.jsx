@@ -64,7 +64,6 @@ const Login = () => {
     severity: 'success',
   });
   const navigate = useNavigate();
-  const [, setShouldRedirect] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -75,8 +74,7 @@ const Login = () => {
     onSubmit: (values) => {
       localStorage.email = formik.values.email;
       localStorage.password = formik.values.password;
-      navigate('dashboard/');
-      login(values, setSnackbarInfo, setShouldRedirect);
+      login(values, setSnackbarInfo, navigate);
     },
   });
 

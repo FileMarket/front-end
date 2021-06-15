@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -71,6 +72,7 @@ const Signup = () => {
     message: '',
     severity: 'success',
   });
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -82,7 +84,7 @@ const Signup = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      signup(values, setSnackbarInfo);
+      signup(values, setSnackbarInfo, navigate);
     },
   });
 

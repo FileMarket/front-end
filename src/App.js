@@ -12,6 +12,7 @@ import rtl from 'jss-rtl';
 import Login from './Login';
 import Signup from './Signup';
 import Landing from './Landing';
+import Header from './Header';
 
 const theme = createMuiTheme({
   direction: 'rtl',
@@ -38,9 +39,10 @@ const App = () => (
     <RTL>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Header />} />
         </Routes>
       </BrowserRouter>
     </RTL>

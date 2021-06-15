@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Button,
@@ -19,17 +20,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Header = () => {
+  const classes = useStyles();
   const [snackbarInfo, setSnackbarInfo] = useState({
     open: false,
     message: '',
     severity: 'success',
   });
-  const classes = useStyles();
-  // const [shouldRedirect, setShouldRedirect] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(setSnackbarInfo);
-    // setShouldRedirect(true);
+    logout(setSnackbarInfo, navigate);
   };
 
   return (

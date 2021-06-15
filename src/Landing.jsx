@@ -58,7 +58,6 @@ const useStyles = makeStyles(theme => ({
 const Landing = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  // const [shouldRedirect, setShouldRedirect] = useState(0);
 
   return (
     <>
@@ -87,7 +86,7 @@ const Landing = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => navigate('signup/')}
+                    onClick={() => navigate('/signup')}
                   >
                     ثبت نام
                   </Button>
@@ -96,7 +95,7 @@ const Landing = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => navigate('login/')}
+                    onClick={() => navigate('/login')}
                   >
                     ورود
                   </Button>

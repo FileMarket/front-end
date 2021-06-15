@@ -1,6 +1,6 @@
 import { API_SIGNUP } from '../apiConstants';
 
-const signup = async (values, setSnackbarInfo) => {
+const signup = async (values, setSnackbarInfo, navigate) => {
   fetch(`${API_SIGNUP}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -14,10 +14,11 @@ const signup = async (values, setSnackbarInfo) => {
           message: 'شما با موفقیت در سامانه ثبت نام کردید',
           severity: 'success',
         });
+        navigate('/login');
       } else {
         setSnackbarInfo({
           open: true,
-          message: 'در ثبت نام شما مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+          message: 'این ایمیل قبلا ثبت شده است',
           severity: 'error',
         });
       }

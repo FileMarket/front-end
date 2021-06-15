@@ -1,6 +1,6 @@
 import { API_LOGOUT } from '../apiConstants';
 
-const logout = async (setSnackbarInfo) => {
+const logout = async (setSnackbarInfo, navigate) => {
   fetch(`${API_LOGOUT}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -15,6 +15,7 @@ const logout = async (setSnackbarInfo) => {
           message: 'با موفقیت خارج شدید',
           severity: 'success',
         });
+        navigate('/');
       } else {
         setSnackbarInfo({
           open: true,

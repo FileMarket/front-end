@@ -1,6 +1,6 @@
 import { API_LOGIN } from '../apiConstants';
 
-const login = async (values, setSnackbarInfo, setShouldRedirect) => {
+const login = async (values, setSnackbarInfo, navigate) => {
   fetch(`${API_LOGIN}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -15,11 +15,11 @@ const login = async (values, setSnackbarInfo, setShouldRedirect) => {
           message: 'با موفقیت وارد شدید',
           severity: 'success',
         });
-        setShouldRedirect(true);
+        navigate('/dashboard');
       } else {
         setSnackbarInfo({
           open: true,
-          message: 'در وارد شدن به سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+          message: 'رمز عبور یا ایمیل وارد شده اشتباه است',
           severity: 'error',
         });
       }
