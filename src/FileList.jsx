@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Grid,
-} from '@material-ui/core';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
+import { Container, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FileItem from './FileItem';
 import SnackbarAlert from './Snackbar';
+import DetailDialog from './DetailDialog';
 import { API_GET_ALL_FILES } from './apiConstants';
 
 const useStyles = makeStyles(theme => ({
@@ -18,11 +19,16 @@ const useStyles = makeStyles(theme => ({
 const FormList = () => {
   const classes = useStyles();
   const [allFileItem, setAllFileItem] = useState([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  // const [detailModal, setDetailModal] = useState({
-  //   itemID: '',
-  //   open: false,
-  // });
+  const [snackbarInfo, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
+  const [detailModal, setDetailModal] = useState({
+    open: false,
+    isBought: false,
+    fileDetail: {},
+  });
 
   useEffect(() => {
     const getAllFileItems = async () => {
@@ -36,7 +42,11 @@ const FormList = () => {
             .flatMap(key => responseJson[key]);
           setAllFileItem(fileItem);
         })
-        .catch(() => setSnackbarOpen(true));
+        .catch(() => setSnackbarInfo({
+          open: true,
+          message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
+          severity: 'error',
+        }));
     };
     getAllFileItems();
   }, []);
@@ -51,17 +61,25 @@ const FormList = () => {
                 itemKey={value.id}
                 fileName={value.name}
                 price={value.price}
-                setModalOpen={() => null}
+                setModalOpen={setDetailModal}
+                setSnackbarInfo={setSnackbarInfo}
               />
             </Grid>
           ))
         }
       </Grid>
       <SnackbarAlert
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
-        message="در بارگیری لیست فایل‌های موجود اشکالی رخ داده است"
-        severity="error"
+        open={snackbarInfo.open}
+        setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
+        message={snackbarInfo.message}
+        severity={snackbarInfo.severity}
+      />
+      <DetailDialog
+        fileDetail={detailModal.fileDetail}
+        open={detailModal.open}
+        setOpen={setDetailModal}
+        isBought={detailModal.isBought}
+        setSnackbarInfo={setSnackbarInfo}
       />
     </Container>
   );

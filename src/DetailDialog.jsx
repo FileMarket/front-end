@@ -1,97 +1,174 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Button,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
+  Divider,
+  Grid,
+  Typography,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import buy from './api-client/Buy';
+import download from './api-client/Download';
+import image from './image/file_transfer.jpg';
+
+const persianFeatures = {
+  size: 'حجم(بایت)',
+  format: 'فرمت',
+  category: 'دسته بندی',
+  subcategory: 'زیر دسته بندی',
+  author_name: 'نویسنده',
+  author_email: 'ایمیل',
+};
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 700,
+    backgroundColor: theme.palette.background.paper,
+  },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
+  section1: {
+    margin: theme.spacing(3, 2),
+  },
+  section2: {
+    margin: theme.spacing(2),
+  },
+  section3: {
+    margin: theme.spacing(3, 1, 1),
+  },
+}));
 
 const DetailDialogBody = (props) => {
-  const {
-    title,
-    subTitle,
-    setModalOpen,
-    onYesButtonClick,
-  } = props;
-
-  const handleYesButtonClick = () => {
-    onYesButtonClick();
-    setModalOpen(false);
-  };
+  const classes = useStyles();
+  const { detail } = props;
 
   return (
-    <div>
-      <DialogTitle id="alert-dialog-slide-title">
-        {title}
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          {subTitle}
-        </DialogContentText>
-      </DialogContent>
-
-      <DialogActions>
-        <Button
-          color="primary"
-          onClick={() => setModalOpen(false)}
-        >
-          خیر
-        </Button>
-
-        <Button
-          onClick={handleYesButtonClick}
-          color="primary"
-          autoFocus
-        >
-          بله
-        </Button>
-      </DialogActions>
+    <div className={classes.root}>
+      <div className={classes.section1}>
+        <Grid container alignItems="center">
+          <Grid item xs>
+            <Typography gutterBottom variant="h4">
+              {detail.name}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography gutterBottom variant="h6">
+              {`${detail.price} تومان`}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Typography color="textSecondary" variant="body2">
+          {detail.description}
+        </Typography>
+      </div>
+      <Divider variant="middle" />
+      <div className={classes.section2}>
+        <Container className={classes.cardGrid} maxWidth="md">
+          <Grid container spacing={2}>
+            {
+              Object.keys(detail)
+                .filter(e => e !== 'id' && e !== 'name' && e !== 'description' && e !== 'price')
+                .map(key => (
+                  <Grid item key={key} xs={6}>
+                    <Typography display="inline" color="textSecondary" variant="body2">
+                      {`${persianFeatures[key]} : `}
+                    </Typography>
+                    <Typography display="inline" variant="body2">
+                      {detail[key]}
+                    </Typography>
+                  </Grid>
+                ))
+            }
+          </Grid>
+        </Container>
+      </div>
     </div>
   );
 };
 
+DetailDialogBody.propTypes = {
+  detail: PropTypes.object.isRequired,
+};
+
 const DetailDialog = (props) => {
   const {
-    title,
-    subTitle,
-    modalOpen,
-    setModalOpen,
-    onYesButtonClick,
+    fileDetail,
+    open,
+    setOpen,
+    isBought,
+    setSnackbarInfo,
   } = props;
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    setOpen({
+      open: false,
+      isBought,
+      fileDetail,
+    });
+  };
+
+  const handleBuyOrDownloadClicked = () => {
+    if (isBought) {
+      download();
+    } else if (localStorage.token) {
+      const successfulBought = buy({
+        file_id: fileDetail.id,
+        token: localStorage.token,
+      }, setSnackbarInfo);
+      setOpen({
+        open,
+        isBought: Boolean(successfulBought),
+        fileDetail,
+      });
+    } else {
+      navigate('/login');
+    }
+  };
 
   return (
-    <Dialog
-      open={modalOpen}
-      onClose={() => setModalOpen(false)}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DetailDialogBody
-        title={title}
-        subTitle={subTitle}
-        setModalOpen={setModalOpen}
-        onYesButtonClick={onYesButtonClick}
-      />
-    </Dialog>
+    <>
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="max-width-dialog-title"
+      >
+        <img src={image} alt="pic" style={{ height: '350px', width: '600px' }} />
+        <DialogContent>
+          <DetailDialogBody detail={fileDetail} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleBuyOrDownloadClicked}
+          >
+            {isBought ? 'بارگیری' : 'خرید'}
+          </Button>
+          <Button variant="outlined" onClick={handleClose} color="primary">
+            بستن
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
-DetailDialogBody.propTypes = {
-  title: PropTypes.string.isRequired,
-  subTitle: PropTypes.string.isRequired,
-  setModalOpen: PropTypes.func.isRequired,
-  onYesButtonClick: PropTypes.func.isRequired,
-};
-
 DetailDialog.propTypes = {
-  title: PropTypes.string.isRequired,
-  subTitle: PropTypes.string.isRequired,
-  modalOpen: PropTypes.bool.isRequired,
-  setModalOpen: PropTypes.func.isRequired,
-  onYesButtonClick: PropTypes.func.isRequired,
+  fileDetail: PropTypes.object.isRequired,
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  isBought: PropTypes.bool.isRequired,
+  setSnackbarInfo: PropTypes.func.isRequired,
 };
 
 export default DetailDialog;

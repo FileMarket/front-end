@@ -1,15 +1,13 @@
-import { API_LOGIN } from '../apiConstants';
+import { API_DOWNLOAD_FILE } from '../apiConstants';
 
-const login = async (values, setSnackbarInfo, navigate) => {
-  fetch(`${API_LOGIN}`, {
-    method: 'post',
+const download = async (file_id, setSnackbarInfo, navigate) => {
+  fetch(`${API_DOWNLOAD_FILE}?token=${localStorage.token}&file_id=${file_id}`, {
+    method: 'get',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(values, 2, 0),
   })
     .then(response => response.json())
     .then((responseJson) => {
       if (responseJson.code === 200) {
-        localStorage.setItem('token', responseJson.token);
         setSnackbarInfo({
           open: true,
           message: 'با موفقیت وارد شدید',
@@ -33,4 +31,4 @@ const login = async (values, setSnackbarInfo, navigate) => {
     });
 };
 
-export default login;
+export default download;

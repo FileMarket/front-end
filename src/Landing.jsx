@@ -1,17 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  AppBar,
   Button,
   Container,
   CssBaseline,
   Grid,
-  Toolbar,
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FileList from './FileList';
-import logo from './image/logo.png';
+import Header from './Header';
 
 const Copyright = () => (
   <Typography variant="body2" color="textSecondary" align="center">
@@ -62,14 +60,7 @@ const Landing = () => {
   return (
     <>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <img src={logo} alt="Logo" className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            فایل مارکت
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Header />
       <main>
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
@@ -80,28 +71,30 @@ const Landing = () => {
               بستری امن و کاربردی و در دسترس برای دارندگان محصولات مجازی و
               راحتی در پیداکردن محصول مورد نیاز و امنیت در خرید برای خریدارن
             </Typography>
-            <div className={classes.heroButtons}>
-              <Grid container spacing={2} justify="center">
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/signup')}
-                  >
-                    ثبت نام
-                  </Button>
+            {!localStorage.getItem('token') && (
+              <div className={classes.heroButtons}>
+                <Grid container spacing={2} justify="center">
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => navigate('/signup')}
+                    >
+                      ثبت نام
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => navigate('/login')}
+                    >
+                      ورود
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/login')}
-                  >
-                    ورود
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
+              </div>
+            )}
           </Container>
         </div>
         <FileList />

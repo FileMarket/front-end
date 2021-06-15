@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -10,6 +11,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import DetailsIcon from '@material-ui/icons/Details';
+import {
+  API_GET_FILE_DETAIL,
+  API_CHECK_FILE_REGISTERED,
+} from './apiConstants';
 import image from './image/file_transfer.jpg';
 
 const useStyles = makeStyles(() => ({
@@ -32,10 +37,46 @@ const FileItem = (props) => {
     fileName,
     price,
     setModalOpen,
+    setSnackbarInfo,
   } = props;
   const classes = useStyles();
 
-  const detailModalOpenHandler = () => setModalOpen({ id: itemKey, open: true });
+  const detailModalOpenHandler = async () => {
+    let checkFileIsRegistered = false;
+    if (localStorage.token) {
+      await fetch(`${API_CHECK_FILE_REGISTERED}?id=${itemKey}&token=${localStorage.getItem('token')}`, {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .then(response => response.json())
+        .then((responseJson) => {
+          console.log(responseJson);
+          checkFileIsRegistered = responseJson.result === 'true';
+        })
+        .catch(() => setSnackbarInfo({
+          open: true,
+          message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
+          severity: 'error',
+        }));
+    }
+    await fetch(`${API_GET_FILE_DETAIL}?id=${itemKey}`, {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => response.json())
+      .then((responseJson) => {
+        setModalOpen({
+          open: true,
+          isBought: checkFileIsRegistered,
+          fileDetail: responseJson,
+        });
+      })
+      .catch(() => setSnackbarInfo({
+        open: true,
+        message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
+        severity: 'error',
+      }));
+  };
 
   return (
     <Card className={classes.card}>
@@ -71,6 +112,7 @@ FileItem.propTypes = {
   fileName: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   setModalOpen: PropTypes.func.isRequired,
+  setSnackbarInfo: PropTypes.func.isRequired,
 };
 
 export default FileItem;

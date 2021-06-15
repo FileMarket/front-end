@@ -16,13 +16,14 @@ const logout = async (setSnackbarInfo, navigate) => {
           severity: 'success',
         });
         navigate('/');
-      } else {
-        setSnackbarInfo({
-          open: true,
-          message: 'در خارج شدن از سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
-          severity: 'error',
-        });
+        return true;
       }
+      setSnackbarInfo({
+        open: true,
+        message: 'در خارج شدن از سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+        severity: 'error',
+      });
+      return false;
     })
     .catch(() => {
       setSnackbarInfo({
@@ -30,6 +31,7 @@ const logout = async (setSnackbarInfo, navigate) => {
         message: 'در خارج شدن از سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
         severity: 'error',
       });
+      return false;
     });
 };
 
