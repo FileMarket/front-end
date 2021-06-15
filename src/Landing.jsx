@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Button,
@@ -57,68 +57,65 @@ const useStyles = makeStyles(theme => ({
 
 const Landing = () => {
   const classes = useStyles();
-  const [shouldRedirect, setShouldRedirect] = useState(0);
+  const navigate = useNavigate();
+  // const [shouldRedirect, setShouldRedirect] = useState(0);
 
-  return shouldRedirect === 1
-    ? <Redirect to="/login" />
-    : shouldRedirect === 2
-      ? <Redirect to="/signup" />
-      : (
-        <>
-          <CssBaseline />
-          <AppBar position="relative">
-            <Toolbar>
-              <img src={logo} alt="Logo" className={classes.icon} />
-              <Typography variant="h6" color="inherit" noWrap>
-                فایل مارکت
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <main>
-            <div className={classes.heroContent}>
-              <Container maxWidth="sm">
-                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                  فایل مارکت
-                </Typography>
-                <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                  بستری امن و کاربردی و در دسترس برای دارندگان محصولات مجازی و
-                  راحتی در پیداکردن محصول مورد نیاز و امنیت در خرید برای خریدارن
-                </Typography>
-                <div className={classes.heroButtons}>
-                  <Grid container spacing={2} justify="center">
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => setShouldRedirect(2)}
-                      >
-                        ثبت نام
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => setShouldRedirect(1)}
-                      >
-                        ورود
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </div>
-              </Container>
-            </div>
-            <FileList />
-          </main>
-          <footer className={classes.footer}>
-            <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
-              حقوق سایت و تمامی محصولات برای توسعه دهندگان محفوظ می باشد.
-              استفاده از خدمات به منزله پذیرش قوانین ما می باشد.
+  return (
+    <>
+      <CssBaseline />
+      <AppBar position="relative">
+        <Toolbar>
+          <img src={logo} alt="Logo" className={classes.icon} />
+          <Typography variant="h6" color="inherit" noWrap>
+            فایل مارکت
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <main>
+        <div className={classes.heroContent}>
+          <Container maxWidth="sm">
+            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+              فایل مارکت
             </Typography>
-            <Copyright />
-          </footer>
-        </>
-      );
+            <Typography variant="h5" align="center" color="textSecondary" paragraph>
+              بستری امن و کاربردی و در دسترس برای دارندگان محصولات مجازی و
+              راحتی در پیداکردن محصول مورد نیاز و امنیت در خرید برای خریدارن
+            </Typography>
+            <div className={classes.heroButtons}>
+              <Grid container spacing={2} justify="center">
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('signup/')}
+                  >
+                    ثبت نام
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('login/')}
+                  >
+                    ورود
+                  </Button>
+                </Grid>
+              </Grid>
+            </div>
+          </Container>
+        </div>
+        <FileList />
+      </main>
+      <footer className={classes.footer}>
+        <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
+          حقوق سایت و تمامی محصولات برای توسعه دهندگان محفوظ می باشد.
+          استفاده از خدمات به منزله پذیرش قوانین ما می باشد.
+        </Typography>
+        <Copyright />
+      </footer>
+    </>
+  );
 };
 
 export default Landing;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   createMuiTheme,
@@ -37,11 +37,11 @@ const App = () => (
   <ThemeProvider theme={theme}>
     <RTL>
       <BrowserRouter>
-        <div>
+        <Routes>
           <Route exact path="/" component={Landing} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
-        </div>
+        </Routes>
       </BrowserRouter>
     </RTL>
   </ThemeProvider>
