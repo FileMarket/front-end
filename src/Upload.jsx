@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { DropzoneArea } from 'material-ui-dropzone';
 import { useFormik } from 'formik';
@@ -12,7 +13,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Header from './Header';
-import SnackbarAlert from './Snackbar';
 import uploadFile from './api-client/Upload';
 import { API_GET_ALL_CATEGORY } from './apiConstants';
 import upload from './image/upload.png';
@@ -68,15 +68,11 @@ const validationSchema = yup.object({
     .required('انتخاب فایل الزامی است'),
 });
 
-const Upload = () => {
+const Upload = (props) => {
   const classes = useStyles();
+  const { setSnackbarInfo } = props;
   const data = new FormData();
   const [category, setCategory] = useState([]);
-  const [snackbarInfo, setSnackbarInfo] = useState({
-    open: false,
-    message: '',
-    severity: 'success',
-  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -101,7 +97,7 @@ const Upload = () => {
     };
 
     fetchMyAPI();
-  }, []);
+  }, [setSnackbarInfo]);
 
   const formik = useFormik({
     initialValues: {
@@ -171,6 +167,8 @@ const Upload = () => {
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
+                    multiline
+                    rows={2}
                     autoComplete="off"
                     error={
                       !!formik.errors.description
@@ -304,14 +302,12 @@ const Upload = () => {
           </div>
         </Grid>
       </Grid>
-      <SnackbarAlert
-        open={snackbarInfo.open}
-        setOpen={e => setSnackbarInfo({ ...snackbarInfo, open: e })}
-        message={snackbarInfo.message}
-        severity={snackbarInfo.severity}
-      />
     </>
   );
+};
+
+Upload.propTypes = {
+  setSnackbarInfo: PropTypes.func.isRequired,
 };
 
 export default Upload;

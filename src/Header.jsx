@@ -223,6 +223,7 @@ const Header = () => {
           open={isAnchorElOpen}
           onClose={handleProfileMenuClose}
         >
+          <MenuItem>{localStorage.email}</MenuItem>
           <MenuItem onClick={() => navigate('/')}>خانه</MenuItem>
           <MenuItem onClick={() => navigate('/upload')}>آپلود فایل</MenuItem>
           <MenuItem onClick={handleLogout}>خروج</MenuItem>

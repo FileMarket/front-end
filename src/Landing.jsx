@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -53,8 +54,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Landing = () => {
+const Landing = (props) => {
   const classes = useStyles();
+  const { setSnackbarInfo } = props;
   const navigate = useNavigate();
 
   return (
@@ -97,7 +99,7 @@ const Landing = () => {
             )}
           </Container>
         </div>
-        <FileList />
+        <FileList setSnackbarInfo={setSnackbarInfo} />
       </main>
       <footer className={classes.footer}>
         <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
@@ -108,6 +110,10 @@ const Landing = () => {
       </footer>
     </>
   );
+};
+
+Landing.propTypes = {
+  setSnackbarInfo: PropTypes.func.isRequired,
 };
 
 export default Landing;

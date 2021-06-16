@@ -2,12 +2,14 @@ import React, {
   useState,
   useEffect,
 } from 'react';
+import PropTypes from 'prop-types';
 import { Container, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FileItem from './FileItem';
-import SnackbarAlert from './Snackbar';
 import DetailDialog from './DetailDialog';
+import ConfirmationDialog from './ConfirmationModal';
 import { API_GET_ALL_FILES } from './apiConstants';
+import buy from './api-client/Buy';
 
 const useStyles = makeStyles(theme => ({
   cardGrid: {
@@ -16,14 +18,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const FormList = () => {
+const FormList = (props) => {
   const classes = useStyles();
+  const { setSnackbarInfo } = props;
   const [allFileItem, setAllFileItem] = useState([]);
-  const [snackbarInfo, setSnackbarInfo] = useState({
-    open: false,
-    message: '',
-    severity: 'success',
-  });
+  const [confirmationModal, setConfirmationModal] = useState(false);
+
   const [detailModal, setDetailModal] = useState({
     open: false,
     isBought: false,
@@ -36,20 +36,29 @@ const FormList = () => {
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
       })
-        .then(response => response.json())
-        .then((responseJson) => {
-          const fileItem = Object.keys(responseJson)
-            .flatMap(key => responseJson[key]);
-          setAllFileItem(fileItem);
+        .then((response) => {
+          if (response.status !== 500) {
+            return response.json();
+          }
+          return 204;
         })
-        .catch(() => setSnackbarInfo({
-          open: true,
-          message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
-          severity: 'error',
-        }));
+        .then((responseJson) => {
+          if (responseJson.code !== 204) {
+            const fileItem = Object.keys(responseJson)
+              .flatMap(key => responseJson[key]);
+            setAllFileItem(fileItem);
+          }
+        })
+        .catch(() => {
+          setSnackbarInfo({
+            open: true,
+            message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
+            severity: 'error',
+          });
+        });
     };
     getAllFileItems();
-  }, []);
+  }, [setSnackbarInfo]);
 
   return (
     <Container className={classes.cardGrid} maxWidth="md">
@@ -68,21 +77,37 @@ const FormList = () => {
           ))
         }
       </Grid>
-      <SnackbarAlert
-        open={snackbarInfo.open}
-        setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
-        message={snackbarInfo.message}
-        severity={snackbarInfo.severity}
-      />
       <DetailDialog
         fileDetail={detailModal.fileDetail}
         open={detailModal.open}
         setOpen={setDetailModal}
         isBought={detailModal.isBought}
         setSnackbarInfo={setSnackbarInfo}
+        setConfirmationModal={setConfirmationModal}
+      />
+      <ConfirmationDialog
+        title={`آیا از خرید ${detailModal.fileDetail.name} مطمئن هستید؟`}
+        subTitle="بعد از خرید فایل امکان مرجوع کردن آن و بازگشت مبلغ آن وجود ندارد"
+        modalOpen={confirmationModal}
+        setModalOpen={setConfirmationModal}
+        onYesButtonClick={() => {
+          const res = buy({
+            file_id: detailModal.fileDetail.id,
+            token: localStorage.token,
+          }, setSnackbarInfo);
+          setDetailModal({
+            open: detailModal.open,
+            isBought: Boolean(res),
+            fileDetail: detailModal.fileDetail,
+          });
+        }}
       />
     </Container>
   );
+};
+
+FormList.propTypes = {
+  setSnackbarInfo: PropTypes.func.isRequired,
 };
 
 export default FormList;

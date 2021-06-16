@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -12,7 +13,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import SnackbarAlert from './Snackbar';
 import login from './api-client/Login';
 import file_transfer from './image/file_transfer.jpg';
 
@@ -55,15 +55,11 @@ const validationSchema = yup.object({
     .required('وارد کردن رمز عبور الزامی است'),
 });
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
   const [check, setCheck] = useState(Boolean(localStorage.checkbox));
-  const [snackbarInfo, setSnackbarInfo] = useState({
-    open: false,
-    message: '',
-    severity: 'success',
-  });
   const navigate = useNavigate();
+  const { setSnackbarInfo } = props;
 
   const formik = useFormik({
     initialValues: {
@@ -185,14 +181,11 @@ const Login = () => {
           </div>
         </Grid>
       </Grid>
-      <SnackbarAlert
-        open={snackbarInfo.open}
-        setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
-        message={snackbarInfo.message}
-        severity={snackbarInfo.severity}
-      />
     </>
   );
 };
 
+Login.propTypes = {
+  setSnackbarInfo: PropTypes.func.isRequired,
+};
 export default Login;

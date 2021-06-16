@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -10,7 +11,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import SnackbarAlert from './Snackbar';
 import signup from './api-client/Signup';
 import file_transfer from './image/file_transfer.jpg';
 
@@ -65,13 +65,9 @@ const validationSchema = yup.object({
     .max(11, 'شماره تلفن همراه باید ۱۱ رقم باشد'),
 });
 
-const Signup = () => {
+const Signup = (props) => {
   const classes = useStyles();
-  const [snackbarInfo, setSnackbarInfo] = useState({
-    open: false,
-    message: '',
-    severity: 'success',
-  });
+  const { setSnackbarInfo } = props;
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -195,14 +191,12 @@ const Signup = () => {
           </div>
         </Grid>
       </Grid>
-      <SnackbarAlert
-        open={snackbarInfo.open}
-        setOpen={e => setSnackbarInfo({ message: '', severity: 'success', open: e })}
-        message={snackbarInfo.message}
-        severity={snackbarInfo.severity}
-      />
     </>
   );
+};
+
+Signup.propTypes = {
+  setSnackbarInfo: PropTypes.func.isRequired,
 };
 
 export default Signup;

@@ -1,6 +1,6 @@
 import { API_DOWNLOAD_FILE } from '../apiConstants';
 
-const download = async (file_id, setSnackbarInfo, navigate) => {
+const download = async (file_id, setSnackbarInfo) => {
   fetch(`${API_DOWNLOAD_FILE}?token=${localStorage.token}&file_id=${file_id}`, {
     method: 'get',
     headers: { 'Content-Type': 'application/json' },
@@ -10,14 +10,13 @@ const download = async (file_id, setSnackbarInfo, navigate) => {
       if (responseJson.code === 200) {
         setSnackbarInfo({
           open: true,
-          message: 'با موفقیت وارد شدید',
+          message: 'فایل با موفقیت دانلود شد',
           severity: 'success',
         });
-        navigate('/');
       } else {
         setSnackbarInfo({
           open: true,
-          message: 'رمز عبور یا ایمیل وارد شده اشتباه است',
+          message: 'در بارگیری فایل خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
           severity: 'error',
         });
       }
@@ -25,7 +24,7 @@ const download = async (file_id, setSnackbarInfo, navigate) => {
     .catch(() => {
       setSnackbarInfo({
         open: true,
-        message: 'در وارد شدن به سامانه مشکلی به وجود آمده است. لطفاً مجدداً تلاش کنید',
+        message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
         severity: 'error',
       });
     });

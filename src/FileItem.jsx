@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -44,13 +43,12 @@ const FileItem = (props) => {
   const detailModalOpenHandler = async () => {
     let checkFileIsRegistered = false;
     if (localStorage.token) {
-      await fetch(`${API_CHECK_FILE_REGISTERED}?id=${itemKey}&token=${localStorage.getItem('token')}`, {
+      await fetch(`${API_CHECK_FILE_REGISTERED}?file_id=${itemKey}&token=${localStorage.getItem('token')}`, {
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
       })
         .then(response => response.json())
         .then((responseJson) => {
-          console.log(responseJson);
           checkFileIsRegistered = responseJson.result === 'true';
         })
         .catch(() => setSnackbarInfo({

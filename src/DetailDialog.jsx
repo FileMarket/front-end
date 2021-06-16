@@ -12,7 +12,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import buy from './api-client/Buy';
 import download from './api-client/Download';
 import image from './image/file_transfer.jpg';
 
@@ -104,6 +103,7 @@ const DetailDialog = (props) => {
     setOpen,
     isBought,
     setSnackbarInfo,
+    setConfirmationModal,
   } = props;
   const navigate = useNavigate();
 
@@ -117,17 +117,9 @@ const DetailDialog = (props) => {
 
   const handleBuyOrDownloadClicked = () => {
     if (isBought) {
-      download();
+      download(fileDetail.id, setSnackbarInfo);
     } else if (localStorage.token) {
-      const successfulBought = buy({
-        file_id: fileDetail.id,
-        token: localStorage.token,
-      }, setSnackbarInfo);
-      setOpen({
-        open,
-        isBought: Boolean(successfulBought),
-        fileDetail,
-      });
+      setConfirmationModal(true);
     } else {
       navigate('/login');
     }
@@ -169,6 +161,7 @@ DetailDialog.propTypes = {
   setOpen: PropTypes.func.isRequired,
   isBought: PropTypes.bool.isRequired,
   setSnackbarInfo: PropTypes.func.isRequired,
+  setConfirmationModal: PropTypes.func.isRequired,
 };
 
 export default DetailDialog;
