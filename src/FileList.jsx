@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {
   useState,
   useEffect,
@@ -87,17 +88,17 @@ const FormList = (props) => {
       />
       <ConfirmationDialog
         title={`آیا از خرید ${detailModal.fileDetail.name} مطمئن هستید؟`}
-        subTitle="بعد از خرید فایل امکان مرجوع کردن آن و بازگشت مبلغ آن وجود ندارد"
+        subTitle="بعد از خرید فایل امکان مرجوع کردن و بازگشت مبلغ آن وجود ندارد"
         modalOpen={confirmationModal}
         setModalOpen={setConfirmationModal}
         onYesButtonClick={() => {
-          const res = buy({
+          buy({
             file_id: detailModal.fileDetail.id,
             token: localStorage.token,
           }, setSnackbarInfo);
           setDetailModal({
             open: detailModal.open,
-            isBought: Boolean(res),
+            isBought: Boolean(localStorage.getItem('buyRes')),
             fileDetail: detailModal.fileDetail,
           });
         }}

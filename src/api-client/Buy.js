@@ -1,7 +1,7 @@
 import { API_BUY_FILE } from '../apiConstants';
 
 const buy = async (values, setSnackbarInfo) => {
-  fetch(`${API_BUY_FILE}`, {
+  await fetch(`${API_BUY_FILE}`, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(values, 2, 0),
@@ -14,14 +14,14 @@ const buy = async (values, setSnackbarInfo) => {
           message: 'فایل مورد نظر با موفقیت خریداری شد',
           severity: 'success',
         });
-        return true;
+        localStorage.setItem('buyRes', true);
       }
       setSnackbarInfo({
         open: true,
         message: 'موجودی کیف پول شما کافی نیست',
         severity: 'error',
       });
-      return false;
+      localStorage.setItem('buyRes', false);
     })
     .catch(() => {
       setSnackbarInfo({
@@ -29,7 +29,7 @@ const buy = async (values, setSnackbarInfo) => {
         message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
         severity: 'error',
       });
-      return false;
+      localStorage.setItem('buyRes', false);
     });
 };
 

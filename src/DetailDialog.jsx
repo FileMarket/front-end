@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -63,8 +64,8 @@ const DetailDialogBody = (props) => {
             </Typography>
           </Grid>
         </Grid>
-        <Typography color="textSecondary" variant="body2">
-          {detail.description}
+        <Typography component="span" color="textSecondary" variant="body2">
+          {detail.description.split('\n').map((i, key) => <p key={key}>{i}</p>)}
         </Typography>
       </div>
       <Divider variant="middle" />
