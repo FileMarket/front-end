@@ -122,6 +122,11 @@ const DetailDialog = (props) => {
     } else if (localStorage.token) {
       setConfirmationModal(true);
     } else {
+      setSnackbarInfo({
+        open: true,
+        message: 'باید ابتدا به حساب کاربری خود وارد شوید',
+        severity: 'info',
+      });
       navigate('/login');
     }
   };
