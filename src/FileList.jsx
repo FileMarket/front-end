@@ -97,7 +97,7 @@ const FormList = (props) => {
           }, setSnackbarInfo);
           setDetailModal({
             open: detailModal.open,
-            isBought: Boolean(localStorage.getItem('buyRes')),
+            isBought: localStorage.getItem('buyRes') === 'true',
             fileDetail: detailModal.fileDetail,
           });
         }}

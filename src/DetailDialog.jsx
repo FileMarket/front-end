@@ -13,7 +13,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 import download from './api-client/Download';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import ShopIcon from '@material-ui/icons/Shop';
 import image from './image/file_transfer.jpg';
 
 const persianFeatures = {
@@ -145,13 +148,30 @@ const DetailDialog = (props) => {
           <DetailDialogBody detail={fileDetail} />
         </DialogContent>
         <DialogActions>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={handleBuyOrDownloadClicked}
-          >
-            {isBought ? 'بارگیری' : 'خرید'}
-          </Button>
+          {
+          isBought
+            ? (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ backgroundColor: green[500], color: '#FFFFFF' }}
+                endIcon={<GetAppIcon />}
+                onClick={handleBuyOrDownloadClicked}
+              >
+                بارگیری
+              </Button>
+            )
+            : (
+              <Button
+                variant="contained"
+                color="primary"
+                endIcon={<ShopIcon />}
+                onClick={handleBuyOrDownloadClicked}
+              >
+                خرید
+              </Button>
+            )
+          }
           <Button variant="outlined" onClick={handleClose} color="primary">
             بستن
           </Button>
