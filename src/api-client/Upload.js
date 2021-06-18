@@ -1,6 +1,6 @@
 import { API_FILE_UPLOAD } from '../apiConstants';
 
-const uploadFile = async (values, setSnackbarInfo) => {
+const uploadFile = async (values, navigate, setSnackbarInfo) => {
   fetch(`${API_FILE_UPLOAD}`, {
     method: 'post',
     body: values,
@@ -13,6 +13,7 @@ const uploadFile = async (values, setSnackbarInfo) => {
           message: 'فایل با موفقیت آپلود شد',
           severity: 'success',
         });
+        navigate('/');
       } else {
         setSnackbarInfo({
           open: true,

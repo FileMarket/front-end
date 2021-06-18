@@ -128,7 +128,7 @@ const Upload = (props) => {
         data.append('token', values.token);
         data.append('subcategory_id', values.subcategory_id);
         data.append('file', values.file);
-        uploadFile(data, setSnackbarInfo);
+        uploadFile(data, navigate, setSnackbarInfo);
       }
     },
   });
