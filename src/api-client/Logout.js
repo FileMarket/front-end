@@ -16,6 +16,7 @@ const logout = async (setSnackbarInfo, navigate) => {
           severity: 'success',
         });
         navigate('/');
+        localStorage.clear();
         return true;
       }
       setSnackbarInfo({
