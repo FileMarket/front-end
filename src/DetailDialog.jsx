@@ -120,7 +120,7 @@ const DetailDialog = (props) => {
   };
 
   const handleBuyOrDownloadClicked = () => {
-    if (isBought) {
+    if (localStorage.buyRes === 'true') {
       download(fileDetail.id, setSnackbarInfo);
     } else if (localStorage.token) {
       setConfirmationModal(true);
@@ -149,7 +149,7 @@ const DetailDialog = (props) => {
         </DialogContent>
         <DialogActions>
           {
-          isBought
+          localStorage.buyRes === 'true'
             ? (
               <Button
                 variant="contained"

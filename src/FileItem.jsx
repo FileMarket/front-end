@@ -50,6 +50,7 @@ const FileItem = (props) => {
         .then(response => response.json())
         .then((responseJson) => {
           checkFileIsRegistered = responseJson.result === 'true';
+          localStorage.setItem('buyRes', responseJson.result === 'true');
         })
         .catch(() => setSnackbarInfo({
           open: true,

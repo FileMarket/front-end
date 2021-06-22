@@ -9,27 +9,28 @@ const buy = async (values, setSnackbarInfo) => {
     .then(response => response.json())
     .then((responseJson) => {
       if (responseJson.code === 200) {
+        localStorage.setItem('buyRes', true);
         setSnackbarInfo({
           open: true,
           message: 'فایل مورد نظر با موفقیت خریداری شد',
           severity: 'success',
         });
-        localStorage.setItem('buyRes', true);
+      } else {
+        localStorage.setItem('buyRes', false);
+        setSnackbarInfo({
+          open: true,
+          message: 'موجودی کیف پول شما کافی نیست',
+          severity: 'error',
+        });
       }
-      setSnackbarInfo({
-        open: true,
-        message: 'موجودی کیف پول شما کافی نیست',
-        severity: 'error',
-      });
-      localStorage.setItem('buyRes', false);
     })
     .catch(() => {
+      localStorage.setItem('buyRes', false);
       setSnackbarInfo({
         open: true,
         message: 'در ارتباط با سرور خطایی رخ داده است. لطفاً مجدداً تلاش کنید',
         severity: 'error',
       });
-      localStorage.setItem('buyRes', false);
     });
 };
 
